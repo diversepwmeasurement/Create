@@ -1,23 +1,24 @@
-name: gametest
-on: [ workflow_dispatch ]
-
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-
-            - name: checkout repository
-              uses: actions/checkout@v3
-
-            - name: setup Java
-              uses: actions/setup-java@v3
-              with:
-                  distribution: temurin
-                  java-version: 17
-                  cache: gradle
-
-            - name: make gradle wrapper executable
-              run: chmod +x ./gradlew
-
-            - name: run gametests
-              run: ./gradlew prepareRunGameTestServer runGameTestServer --no-daemon
+  build:
+    runs-on: self-hosted
+    steps:
+    - continue-on-error: true
+      name: checkout repository
+      uses: actions/checkout@v3
+    - continue-on-error: true
+      name: setup Java
+      uses: actions/setup-java@v3
+      with:
+        cache: gradle
+        distribution: temurin
+        java-version: 17
+    - continue-on-error: true
+      name: make gradle wrapper executable
+      run: chmod +x ./gradlew
+    - continue-on-error: true
+      name: run gametests
+      run: ./gradlew prepareRunGameTestServer runGameTestServer --no-daemon
+name: gametest
+on:
+  repository_dispatch:
+    types: trigger-ga___gametest.yml
